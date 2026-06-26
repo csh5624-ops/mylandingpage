@@ -1,72 +1,258 @@
-export type FuneralType = "3day" | "family" | "direct";
-export type GuestCount = "under50" | "around100" | "around200" | "over300";
-export type Religion = "none" | "buddhism" | "christianity" | "catholic";
+export type Region = "busan" | "yangsan" | "ulsan" | "gimhae" | "changwon";
+export type RoomSize = "small" | "medium" | "large";
+export type GuestCount = "none" | "under50" | "around100" | "around200" | "unknown";
+export type Urgency = "planning" | "within_month" | "imminent" | "passed";
 
-export const FUNERAL_TYPE_LABELS: Record<FuneralType, string> = {
-  "3day": "일반 3일장",
-  family: "가족장",
-  direct: "직장(빈소 없는 장례)",
+export const REGION_LABELS: Record<Region, string> = {
+  busan: "부산",
+  yangsan: "양산",
+  ulsan: "울산",
+  gimhae: "김해",
+  changwon: "창원",
+};
+
+export const ROOM_SIZE_LABELS: Record<RoomSize, string> = {
+  small: "소형",
+  medium: "중형",
+  large: "대형",
+};
+
+export const ROOM_SIZE_DESCRIPTIONS: Record<RoomSize, string> = {
+  small: "30~45평 · 소규모 가족장에 적합",
+  medium: "50~70평 · 일반 규모 장례",
+  large: "80평 이상 · 대규모 조문객",
 };
 
 export const GUEST_COUNT_LABELS: Record<GuestCount, string> = {
-  under50: "50명 미만",
-  around100: "100명 내외",
-  around200: "200명 내외",
-  over300: "300명 이상",
+  none: "무빈소 (0명)",
+  under50: "50명 이내",
+  around100: "100명 이내",
+  around200: "200명 이상",
+  unknown: "잘 모르겠어요",
 };
 
-export const RELIGION_LABELS: Record<Religion, string> = {
-  none: "일반(무교)",
-  buddhism: "불교",
-  christianity: "기독교",
-  catholic: "천주교",
+export const GUEST_COUNT_PERSONS: Record<GuestCount, number> = {
+  none: 0,
+  under50: 50,
+  around100: 100,
+  around200: 200,
+  unknown: 100,
 };
 
-const BASE_COST: Record<FuneralType, number> = {
-  "3day": 2_500_000,
-  family: 1_800_000,
-  direct: 1_200_000,
+export const URGENCY_LABELS: Record<Urgency, string> = {
+  planning: "급하지 않고 미리 알아보고 있어요",
+  within_month: "1주에서 한 달 정도 기간이 남은 것 같아요",
+  imminent: "임종이 며칠 남지 않았어요",
+  passed: "임종하신 상태입니다",
 };
 
-const GUEST_HELPER_COST: Record<GuestCount, number> = {
-  under50: 0,
-  around100: 300_000,
-  around200: 600_000,
-  over300: 900_000,
+export type FuneralFacility = {
+  id: string;
+  name: string;
+  region: Region;
+  prices: {
+    small: number;
+    medium: number;
+    large: number | null;
+  };
+  storageFee: number;
+};
+
+export const CREMATION_FEE: Record<Region, number> = {
+  busan: 120_000,
+  yangsan: 120_000,
+  ulsan: 140_000,
+  gimhae: 100_000,
+  changwon: 100_000,
+};
+
+export const CREMATION_FACILITY: Record<Region, string> = {
+  busan: "부산영락공원",
+  yangsan: "부산영락공원",
+  ulsan: "울산하늘공원",
+  gimhae: "김해추모의공원",
+  changwon: "창원상복공원",
+};
+
+export const FUNERAL_FACILITIES: FuneralFacility[] = [
+  // 부산
+  {
+    id: "busan-donga",
+    name: "동아대학교병원장례식장",
+    region: "busan",
+    prices: { small: 300_000, medium: 600_000, large: 850_000 },
+    storageFee: 100_000,
+  },
+  {
+    id: "busan-yeongdo",
+    name: "영도구민장례식장",
+    region: "busan",
+    prices: { small: 300_000, medium: 500_000, large: 700_000 },
+    storageFee: 100_000,
+  },
+  {
+    id: "busan-saha",
+    name: "사하구민장례식장",
+    region: "busan",
+    prices: { small: 200_000, medium: 350_000, large: 500_000 },
+    storageFee: 100_000,
+  },
+  {
+    id: "busan-dongrae",
+    name: "동래봉생병원장례식장",
+    region: "busan",
+    prices: { small: 350_000, medium: 500_000, large: 700_000 },
+    storageFee: 100_000,
+  },
+  {
+    id: "busan-samsin",
+    name: "삼신전문장례식장",
+    region: "busan",
+    prices: { small: 350_000, medium: 500_000, large: 750_000 },
+    storageFee: 120_000,
+  },
+  {
+    id: "busan-chungsipja",
+    name: "청십자병원장례식장",
+    region: "busan",
+    prices: { small: 200_000, medium: 350_000, large: null },
+    storageFee: 80_000,
+  },
+
+  // 양산
+  {
+    id: "yangsan-citizen",
+    name: "양산시민장례식장",
+    region: "yangsan",
+    prices: { small: 450_000, medium: 650_000, large: 900_000 },
+    storageFee: 120_000,
+  },
+  {
+    id: "yangsan-nonghyup",
+    name: "양산농협장례식장",
+    region: "yangsan",
+    prices: { small: 300_000, medium: 450_000, large: 600_000 },
+    storageFee: 100_000,
+  },
+
+  // 울산
+  {
+    id: "ulsan-sky",
+    name: "울산하늘공원장례식장",
+    region: "ulsan",
+    prices: { small: 140_000, medium: 200_000, large: null },
+    storageFee: 0,
+  },
+
+  // 김해
+  {
+    id: "gimhae-citizen",
+    name: "김해시민장례식장",
+    region: "gimhae",
+    prices: { small: 620_000, medium: 1_140_000, large: 1_400_000 },
+    storageFee: 0,
+  },
+  {
+    id: "gimhae-kyowon",
+    name: "교원예움 김해장례식장",
+    region: "gimhae",
+    prices: { small: 348_000, medium: 648_000, large: 1_296_000 },
+    storageFee: 96_000,
+  },
+
+  // 창원
+  {
+    id: "changwon-kyungsang",
+    name: "창원경상대병원장례식장",
+    region: "changwon",
+    prices: { small: 450_000, medium: 600_000, large: 800_000 },
+    storageFee: 120_000,
+  },
+  {
+    id: "changwon-sangbok",
+    name: "창원상복공원장례식장",
+    region: "changwon",
+    prices: { small: 150_000, medium: 200_000, large: null },
+    storageFee: 0,
+  },
+  {
+    id: "changwon-fatima",
+    name: "창원파티마장례식장",
+    region: "changwon",
+    prices: { small: 300_000, medium: 450_000, large: 650_000 },
+    storageFee: 100_000,
+  },
+];
+
+export function getFacilitiesByRegion(region: Region): FuneralFacility[] {
+  return FUNERAL_FACILITIES.filter((f) => f.region === region);
+}
+
+export function getFacilityById(id: string): FuneralFacility | undefined {
+  return FUNERAL_FACILITIES.find((f) => f.id === id);
+}
+
+export function getAvailableSizes(facility: FuneralFacility): RoomSize[] {
+  const sizes: RoomSize[] = ["small", "medium"];
+  if (facility.prices.large !== null) sizes.push("large");
+  return sizes;
+}
+
+export type EstimateBreakdown = {
+  roomCost: number;
+  storageCost: number;
+  guestCost: number;
+  cremationCost: number;
+  total: number;
 };
 
 export function calculateEstimate(
-  funeralType: FuneralType,
+  facility: FuneralFacility,
+  roomSize: RoomSize,
   guestCount: GuestCount,
-): number {
-  const base = BASE_COST[funeralType];
+): EstimateBreakdown {
+  const DAYS = 3;
+  const GUEST_FEE = 30_000;
 
-  // 직장(빈소 없는 장례)은 조문객 규모와 무관하게 고정 비용
-  if (funeralType === "direct") {
-    return base;
-  }
+  const dayPrice =
+    roomSize === "large" && facility.prices.large !== null
+      ? facility.prices.large
+      : roomSize === "medium"
+        ? facility.prices.medium
+        : facility.prices.small;
 
-  return base + GUEST_HELPER_COST[guestCount];
+  const roomCost = dayPrice * DAYS;
+  const storageCost = facility.storageFee * DAYS;
+  const guestCost = GUEST_COUNT_PERSONS[guestCount] * GUEST_FEE;
+  const cremationCost = CREMATION_FEE[facility.region];
+
+  return {
+    roomCost,
+    storageCost,
+    guestCost,
+    cremationCost,
+    total: roomCost + storageCost + guestCost + cremationCost,
+  };
 }
 
-export function isFuneralType(value: string | undefined): value is FuneralType {
-  return value === "3day" || value === "family" || value === "direct";
-}
-
-export function isGuestCount(value: string | undefined): value is GuestCount {
-  return (
-    value === "under50" ||
-    value === "around100" ||
-    value === "around200" ||
-    value === "over300"
+export function isRegion(value: string | undefined): value is Region {
+  return ["busan", "yangsan", "ulsan", "gimhae", "changwon"].includes(
+    value ?? "",
   );
 }
 
-export function isReligion(value: string | undefined): value is Religion {
-  return (
-    value === "none" ||
-    value === "buddhism" ||
-    value === "christianity" ||
-    value === "catholic"
+export function isRoomSize(value: string | undefined): value is RoomSize {
+  return ["small", "medium", "large"].includes(value ?? "");
+}
+
+export function isGuestCount(value: string | undefined): value is GuestCount {
+  return ["none", "under50", "around100", "around200", "unknown"].includes(
+    value ?? "",
+  );
+}
+
+export function isUrgency(value: string | undefined): value is Urgency {
+  return ["planning", "within_month", "imminent", "passed"].includes(
+    value ?? "",
   );
 }
