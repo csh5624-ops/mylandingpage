@@ -232,8 +232,7 @@ export default async function QuoteResultPage({ searchParams }: Props) {
               전화 상담 · 010-5529-5620
             </a>
             <a
-              href="#kakao"
-              onClick={(e) => e.preventDefault()}
+              href="#"
               className="flex items-center justify-center gap-2 rounded-full border-2 border-brand-200 bg-white px-6 py-4 text-base font-bold text-brand-500 transition-colors hover:bg-brand-50"
             >
               <svg
